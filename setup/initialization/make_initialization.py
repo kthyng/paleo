@@ -3,7 +3,7 @@
 Make initial tracer netCDF files for simulation.
 Using data from ODV, World Ocean Atlas 2013
 
-run setup/make_initialization.py True False
+run make_initialization.py 1 1
 '''
 
 import netCDF4 as netCDF
@@ -36,9 +36,8 @@ args = parser.parse_args()
 
 # doplot = True  # plot profile data
 # makeinitialfile = True  # make netCDF file for initialization
-doplot = bool(args.doplot)
-makeinitialfile = bool(args.makeinitialfile)
-print(doplot, makeinitialfile)
+doplot = args.doplot
+makeinitialfile = args.makeinitialfile
 
 data = netCDF.Dataset('data_from_WOA13_1.00deg_1955-2012_Annual_centerGOM.nc')
 
