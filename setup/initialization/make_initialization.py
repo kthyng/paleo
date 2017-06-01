@@ -12,6 +12,7 @@ import numpy as np
 import matplotlib as mpl
 import octant
 import xarray as xr
+import gsw
 import argparse
 
 
@@ -60,7 +61,7 @@ salt = salt_present + salt_present*0.035  # 3.5% more saline
 # linear equation of state used in ROMS
 TCOEF = 1.7e-4  # 1/Celsius
 SCOEF = 7.6e-4  # 1/nondimensional
-rho0_present = 1027.8  # kg/m^3
+rho0_present = gsw.rho(35, 4.2, 0)  # kg/m^3
 T0_present = 4.2  # deg C
 S0_present = 35  # ppt. This is that same as in ROMS simulation.
 rho_present = rho0_present*(1 + SCOEF*(salt_present-S0_present) - TCOEF*(temp_present-T0_present))
@@ -69,9 +70,7 @@ T0 = T0_present - 2  # deg C
 S0 = S0_present + S0_present*0.035  # ppt. This is that same as in ROMS simulation.
 # read paleo density off T-S diagram since not sure it makes sense to mix
 # present and paleo in linear EOS calculation
-rho0 = 1028.9  # kg/m^3
-# # calculate paleo density from linear EOS
-# rho0 = rho0_present * (1 + 7.6e-4 * (S0-S0_present) - 1.7e-4 * (T0-T0_present))
+rho0 = gsw.rho(36.225, 2.2, 0)  # kg/m^3
 # density of initial data profile
 rho = rho0*(1 + SCOEF*(salt-S0) - TCOEF*(temp-T0))
 
