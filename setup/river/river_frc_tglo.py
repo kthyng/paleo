@@ -42,10 +42,10 @@ river = np.arange(1, nriver+1)
 s_rho = 20
 
 # Set river temp
-river_temp = 2.2
+river_temp = 6.77
 
 # salinity to higher than background salinity of 35
-river_salt = 37.8
+river_salt = 36.225
 
 # vertical profile
 # Want river input to be weighted by the thickness of each layer, which is being
@@ -65,7 +65,7 @@ river_Vshape = (np.diff(C))[:, np.newaxis].repeat(nriver, axis=1)
 # # Changing this to be total flux over time, so units are m^3, still divided into # river inputs
 # transport = 1e14/nriver  # see evernote for calculation
 # Changing this to be total flux over time, so units are m^3, NOT divided into # river inputs
-transport = 1e14
+transport = 1.2e15
 
 # sign for transport — gives direction of input into rho cells
 direction = np.array([1., 1., 1., 1., 1., 1.,
