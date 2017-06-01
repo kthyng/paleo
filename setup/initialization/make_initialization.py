@@ -32,7 +32,7 @@ mpl.rcParams['mathtext.fallback_to_cm'] = 'True'
 parser = argparse.ArgumentParser()
 parser.add_argument('doplot', type=int, default=1, help='1 to plot')
 parser.add_argument('makeinitialfile', type=int, default=0, help='1 to make file for initialization')
-parser.add_argument('--calc_river', type=float, default=1028, help='density of river water')
+parser.add_argument('--calc_river', type=float, help='density of river water')
 args = parser.parse_args()
 
 doplot = args.doplot
@@ -40,6 +40,8 @@ makeinitialfile = args.makeinitialfile
 if args.calc_river is not None:
     rho_river = args.calc_river
     calc = True
+else:
+    calc = False
 
 data = netCDF.Dataset('data_from_WOA13_1.00deg_1955-2012_Annual_centerGOM.nc')
 
