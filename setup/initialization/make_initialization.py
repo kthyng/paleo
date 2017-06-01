@@ -3,7 +3,7 @@
 Make initial tracer netCDF files for simulation.
 Using data from ODV, World Ocean Atlas 2013
 
-run make_initialization.py 1 1
+run make_initialization.py 1 1 1028
 '''
 
 import netCDF4 as netCDF
@@ -32,12 +32,14 @@ mpl.rcParams['mathtext.fallback_to_cm'] = 'True'
 parser = argparse.ArgumentParser()
 parser.add_argument('doplot', type=int, default=1, help='1 to plot')
 parser.add_argument('makeinitialfile', type=int, default=0, help='1 to make file for initialization')
+parser.add_argument('--calc_river', type=float, default=1028, help='density of river water')
 args = parser.parse_args()
 
-# doplot = True  # plot profile data
-# makeinitialfile = True  # make netCDF file for initialization
 doplot = args.doplot
 makeinitialfile = args.makeinitialfile
+if args.calc_river is not None:
+    rho_river = args.calc_river
+    calc = True
 
 data = netCDF.Dataset('data_from_WOA13_1.00deg_1955-2012_Annual_centerGOM.nc')
 
@@ -77,6 +79,13 @@ rho = rho0*(1 + SCOEF*(salt-S0) - TCOEF*(temp-T0))
 # Calculate equivalent temperature values which with no salinity change
 # will give the density profile in rho
 tempeq = (1/TCOEF)*(1-rho/rho0) + T0
+
+# calculate depth and equivalent temperature for input river density
+if calc:
+    depth_river = np.interp(rho_river, rho, depth)
+    temp_river = np.interp(depth_river, depth, tempeq)
+    print('neutral depth of river water: ' + str(depth_river))
+    print('temperature of river water at neutral depth: ' + str(temp_river))
 
 if doplot:
 
