@@ -30,14 +30,15 @@ mpl.rcParams['mathtext.fallback_to_cm'] = 'True'
 
 # parse the input arguments
 parser = argparse.ArgumentParser()
-parser.add_argument('doplot', type=bool, help='True to plot')
-parser.add_argument('makeinitialfile', type=bool, help='True to make file for initialization')
+parser.add_argument('doplot', type=int, default=1, help='1 to plot')
+parser.add_argument('makeinitialfile', type=int, default=0, help='1 to make file for initialization')
 args = parser.parse_args()
 
 # doplot = True  # plot profile data
 # makeinitialfile = True  # make netCDF file for initialization
-doplot = args.doplot
-makeinitialfile = args.makeinitialfile
+doplot = bool(args.doplot)
+makeinitialfile = bool(args.makeinitialfile)
+print(doplot, makeinitialfile)
 
 data = netCDF.Dataset('data_from_WOA13_1.00deg_1955-2012_Annual_centerGOM.nc')
 
