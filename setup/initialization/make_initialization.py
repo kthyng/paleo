@@ -85,9 +85,11 @@ tempeq = (1/TCOEF)*(1-rho/rho0) + T0
 # calculate depth and equivalent temperature for input river density
 if calc:
     depth_river = np.interp(rho_river, rho, depth)
-    temp_river = np.interp(depth_river, depth, tempeq)
+    temp_river = tempeq[0]
+    # temp_river = np.interp(depth_river, depth, tempeq)
     print('neutral depth of river water: ' + str(depth_river))
-    print('temperature of river water at neutral depth: ' + str(temp_river))
+    # print('temperature of river water at neutral depth: ' + str(temp_river))
+    print('surface temperature, to use for river water: ' + str(temp_river) + ' for depth ' + str(depth[0]))
 
 if doplot:
 
