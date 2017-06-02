@@ -149,7 +149,7 @@ if makeinitialfile:
     # coordinates
     lon_rho = grid['lon_rho']
     lat_rho = grid['lat_rho']
-    ocean_time = 86400*14610  # from ocean_tglo.in
+    ocean_time = [86400*14610]  # from ocean_tglo.in
 
     # dimensions
     N = 20
@@ -186,7 +186,7 @@ if makeinitialfile:
                     coords={'lon_rho': (['eta_rho', 'xi_rho'], lon_rho),
                             'lat_rho': (['eta_rho', 'xi_rho'], lat_rho),
                             'z_r': (['s_rho', 'eta_rho', 'xi_rho'], zr),
-                            's_rho': (s_rho),
-                            'ocean_time': (ocean_time)})  # ,
+                            's_rho': (['s_rho'], s_rho),
+                            'ocean_time': (['ocean_time'], ocean_time)})  # ,
                             # 'reference_time': pd.Timestamp('2010-01-01')})
     ds.to_netcdf('ocean_ini.nc')
