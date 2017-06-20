@@ -65,7 +65,7 @@ river_Vshape = (np.diff(C))[:, np.newaxis].repeat(nriver, axis=1)
 # # Changing this to be total flux over time, so units are m^3, still divided into # river inputs
 # transport = 1e14/nriver  # see evernote for calculation
 # Changing this to be total flux over time, so units are m^3, NOT divided into # river inputs
-transport = 3e14
+transport = 1.2e15
 
 # sign for transport — gives direction of input into rho cells
 direction = np.array([1., 1., 1., 1., 1., 1.,
