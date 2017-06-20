@@ -10,7 +10,6 @@ import netCDF4 as netCDF
 import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib as mpl
-import octant
 import xarray as xr
 import gsw
 import argparse
@@ -27,21 +26,6 @@ mpl.rcParams['mathtext.bf'] = 'sans:bold'
 mpl.rcParams['mathtext.sf'] = 'sans'
 mpl.rcParams['mathtext.fallback_to_cm'] = 'True'
 
-
-# parse the input arguments
-parser = argparse.ArgumentParser()
-parser.add_argument('doplot', type=int, default=1, help='1 to plot')
-parser.add_argument('makeinitialfile', type=int, default=0, help='1 to make file for initialization')
-parser.add_argument('--calc_river', type=float, help='density of river water')
-args = parser.parse_args()
-
-doplot = args.doplot
-makeinitialfile = args.makeinitialfile
-if args.calc_river is not None:
-    rho_river = args.calc_river
-    calc = True
-else:
-    calc = False
 
 data = netCDF.Dataset('data_from_WOA13_1.00deg_1955-2012_Annual_centerGOM.nc')
 
@@ -82,16 +66,25 @@ rho = rho0*(1 + SCOEF*(salt-S0) - TCOEF*(temp-T0))
 # will give the density profile in rho
 tempeq = (1/TCOEF)*(1-rho/rho0) + T0
 
-# calculate depth and equivalent temperature for input river density
-if calc:
+def calcs(rho_river, doprint=True):
+
+    # calculate depth and equivalent temperature for input river density
     depth_river = np.interp(rho_river, rho, depth)
     temp_river = tempeq[0]
-    # temp_river = np.interp(depth_river, depth, tempeq)
-    print('neutral depth of river water: ' + str(depth_river))
-    # print('temperature of river water at neutral depth: ' + str(temp_river))
-    print('surface temperature, to use for river water: ' + str(temp_river) + ' for depth ' + str(depth[0]))
 
-if doplot:
+    # calculate river salinity using linear equation
+    salt_river = 1/SCOEF * (rho_river/rho0 - 1 + TCOEF*(temp_river - T0)) + S0
+
+    if doprint:
+        # temp_river = np.interp(depth_river, depth, tempeq)
+        print('neutral depth of river water: ' + str(depth_river))
+        # print('temperature of river water at neutral depth: ' + str(temp_river))
+        print('surface temperature, to use for river water: ' + str(temp_river) + ' for depth ' + str(depth[0]))
+        print('river salinity, from linear eqn of state: ' + str(salt_river))
+    else:
+        return depth_river, temp_river, salt_river
+
+def doplot():
 
     fig, axes = plt.subplots(1, 2, figsize=(13.7,  8.15), sharey=True)
     color = '#934977'  # temp
@@ -141,7 +134,8 @@ if doplot:
     fig.savefig('WOA_profiles.pdf', bbox_inches='tight')
     fig.savefig('WOA_profiles.png', bbox_inches='tight')
 
-if makeinitialfile:
+def makeinitialfile():
+    import octant
 
     # following this for format:
     # https://www.myroms.org/index.php?page=initial
@@ -192,3 +186,30 @@ if makeinitialfile:
                             'ocean_time': (['ocean_time'], ocean_time)})  # ,
                             # 'reference_time': pd.Timestamp('2010-01-01')})
     ds.to_netcdf('ocean_ini.nc')
+
+
+# if not importing, can use argparse
+if __name__ == "__main__":
+    # parse the input arguments
+    parser = argparse.ArgumentParser()
+    parser.add_argument('doplot', type=int, default=1, help='1 to plot')
+    parser.add_argument('makeinitialfile', type=int, default=0, help='1 to make file for initialization')
+    parser.add_argument('--calc_river', type=float, help='density of river water')
+    args = parser.parse_args()
+
+    doplot = args.doplot
+    makeinitialfile = args.makeinitialfile
+    if args.calc_river is not None:
+        rho_river = args.calc_river
+        calc = True
+    else:
+        calc = False
+
+    if calc:
+        calcs(rho_river)
+
+    if doplot:
+        doplot()
+
+    if makeinitialfile:
+        makeinitialfile()

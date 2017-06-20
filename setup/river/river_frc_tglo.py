@@ -12,7 +12,11 @@ from datetime import datetime, timedelta
 
 import numpy as np
 import netCDF4 as netCDF
+import os
 
+
+which = 'new5'
+river_density = 1028
 
 time_units = 'days since 1970-01-01 00:00:00'
 startdate = datetime(2010, 1, 1, 0, 0)
@@ -41,11 +45,20 @@ nriver = len(river_Xposition)  # number of river inputs
 river = np.arange(1, nriver+1)
 s_rho = 20
 
+# calculate river properties: depth_river, temp_river, salt_river
+os.chdir('../initialization')
+import make_initialization
+_, river_temp, river_salt = make_initialization.calcs(1028, doprint=False)
+# import runpy
+# file_globals = runpy.run_module("make_initialization.py 0 0 --calc_river " + str(river_density))
+# os.system('/opt/anaconda2/bin/python2 make_initialization.py 0 0 --calc_river ' + str(river_density))
+os.chdir('../river')
+
 # Set river temp
-river_temp = 18.769
+# river_temp = 18.769
 
 # salinity to higher than background salinity of 36.225
-river_salt = 38.909
+# river_salt = 38.909
 
 # vertical profile
 # Want river input to be weighted by the thickness of each layer, which is being
@@ -65,7 +78,10 @@ river_Vshape = (np.diff(C))[:, np.newaxis].repeat(nriver, axis=1)
 # # Changing this to be total flux over time, so units are m^3, still divided into # river inputs
 # transport = 1e14/nriver  # see evernote for calculation
 # Changing this to be total flux over time, so units are m^3, NOT divided into # river inputs
-transport = 1.2e15
+if which == 'new5':
+    transport = 3e14
+elif which == 'new6':
+    transport = 1.2e15
 
 # sign for transport — gives direction of input into rho cells
 direction = np.array([1., 1., 1., 1., 1., 1.,
