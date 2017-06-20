@@ -15,8 +15,8 @@ import netCDF4 as netCDF
 import os
 
 
-which = 'new5'
-river_density = 1028
+which = 'new6'
+river_density = 1028.5
 
 time_units = 'days since 1970-01-01 00:00:00'
 startdate = datetime(2010, 1, 1, 0, 0)
@@ -114,8 +114,9 @@ weights = iy.astype(float)*yfac/walltot + ix.astype(float)*xfac/walltot  # unit 
 # weight across river inputs by cell wall face
 river_transport *= weights
 
-
-nc = netCDF.Dataset('tglo_river_frc_2010-01-01.nc', 'w', format='NETCDF4')
+fname = which + '_' + str(river_density) + '.nc'
+nc = netCDF.Dataset(fname, 'w', format='NETCDF4')
+# nc = netCDF.Dataset('tglo_river_frc_2010-01-01.nc', 'w', format='NETCDF4')
 nc.createDimension('x_rho', 256)
 nc.createDimension('eta_rho', 128)
 nc.createDimension('s_rho', s_rho)
