@@ -84,7 +84,7 @@ def calcs(rho_river, doprint=True):
     else:
         return depth_river, temp_river, salt_river
 
-def doplot():
+def plot():
 
     fig, axes = plt.subplots(1, 2, figsize=(13.7,  8.15), sharey=True)
     color = '#934977'  # temp
@@ -134,7 +134,7 @@ def doplot():
     fig.savefig('WOA_profiles.pdf', bbox_inches='tight')
     fig.savefig('WOA_profiles.png', bbox_inches='tight')
 
-def makeinitialfile():
+def initialfile():
     import octant
 
     # following this for format:
@@ -209,7 +209,7 @@ if __name__ == "__main__":
         calcs(rho_river)
 
     if doplot:
-        doplot()
+        plot()
 
     if makeinitialfile:
-        makeinitialfile()
+        initialfile()
