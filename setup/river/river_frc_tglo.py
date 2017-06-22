@@ -16,7 +16,7 @@ import os
 
 
 which = 'new6'
-river_density = 1028.5
+river_density = 1029
 
 time_units = 'days since 1970-01-01 00:00:00'
 startdate = datetime(2010, 1, 1, 0, 0)
@@ -48,7 +48,7 @@ s_rho = 20
 # calculate river properties: depth_river, temp_river, salt_river
 os.chdir('../initialization')
 import make_initialization
-_, river_temp, river_salt = make_initialization.calcs(1028, doprint=False)
+_, river_temp, river_salt = make_initialization.calcs(river_density, doprint=False)
 # import runpy
 # file_globals = runpy.run_module("make_initialization.py 0 0 --calc_river " + str(river_density))
 # os.system('/opt/anaconda2/bin/python2 make_initialization.py 0 0 --calc_river ' + str(river_density))
