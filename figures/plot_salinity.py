@@ -18,7 +18,8 @@ import pandas as pd
 
 
 restart = False  # use to show last result from restart file for blowup case
-which = 'new6'
+which = 'new3'
+density = '1028'
 
 # proj = tracpy.tools.make_proj('nwgom-pyproj', **{'llcrnrlon': -98,
 #                               'llcrnrlat': 18, 'urcrnrlon': -78, 'urcrnrlat': 30})
@@ -31,9 +32,9 @@ which = 'new6'
 
 
 if restart:
-    loc = '../runs/' + which + '/ocean_rst.nc'
+    loc = '../runs/' + which + '/' + density + '/ocean_rst.nc'
 else:
-    loc = '../runs/' + which + '/ocean_his_0001.nc'
+    loc = '../runs/' + which + '/' + density + '/ocean_his_0001.nc'
 # d = netCDF.Dataset(loc)
 # salt = d['salt']
 d = xr.open_dataset(loc)
@@ -45,7 +46,7 @@ if ('new1' in loc) or ('new2' in loc):
     cmap = cmo.haline
 else:
     # Find largest salinity value in water column
-    saltlow = salt.isel(s_rho=-1, eta_rho=slice(1,-1), xi_rho=slice(1,-1))
+    saltlow = salt.isel(eta_rho=slice(1,-1), xi_rho=slice(1,-1)).max(axis=1)
     # saltlow = salt[:, :, 1:-1, 1:-1].max(axis=1)
     cmap = cmo.haline_r
 
@@ -54,11 +55,13 @@ if 'new1' in loc:
 elif 'new2' in loc:
     smax = 36.225; smin = 35.2
 elif 'new3' in loc:
-    smax = 36.43; smin = 36.225
+    # smax = 40; smin = 36.225
+    smax = 36.35; smin = 36.225  # old
 elif 'new4' in loc:
     smax = 37.6; smin = 36.225
 elif 'new5' in loc or 'new6' in loc:
-    smax = 38.909; smin = 36.225
+    # smax = 37.5; smin = 36.225
+    smax = 40; smin = 36.225
 
 dates = d.ocean_time
 # t = d['ocean_time']
@@ -68,13 +71,15 @@ if not os.path.exists('saltmax/'):
     os.mkdir('saltmax/')
 if not os.path.exists('saltmax/' + which):
     os.mkdir('saltmax/' + which)
+if not os.path.exists('saltmax/' + which + '/' + density):
+    os.mkdir('saltmax/' + which + '/' + density)
 
 fig = plt.figure(figsize=(10, 6))
         # fig = plt.figure(figsize=(9.4, 7.7), dpi=100)
 
 # for it in range(salt.shape[0]):
 for date in dates:
-    fname = 'saltmax/' + which + '/' + pd.to_datetime(date.data).isoformat()[0:13] + '.png'
+    fname = 'saltmax/' + which + '/' + density + '/' + pd.to_datetime(date.data).isoformat()[0:13] + '.png'
     # fname = 'saltmax/' + str(it).zfill(3) + '.png'
     # if os.path.exists(fname):
     #     continue

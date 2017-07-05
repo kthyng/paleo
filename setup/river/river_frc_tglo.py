@@ -15,8 +15,8 @@ import netCDF4 as netCDF
 import os
 
 
-which = 'new6'
-river_density = 1029
+which = 'new3'
+river_density = 1028
 
 time_units = 'days since 1970-01-01 00:00:00'
 startdate = datetime(2010, 1, 1, 0, 0)
@@ -82,6 +82,8 @@ if which == 'new5':
     transport = 3e14
 elif which == 'new6':
     transport = 1.2e15
+elif which == 'new3':
+    transport = 1e14
 
 # sign for transport — gives direction of input into rho cells
 direction = np.array([1., 1., 1., 1., 1., 1.,

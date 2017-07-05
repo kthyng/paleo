@@ -4,6 +4,7 @@ Make initial tracer netCDF files for simulation.
 Using data from ODV, World Ocean Atlas 2013
 
 run make_initialization.py 1 1 1028
+run make_initialization.py 0 0 --calc_river 1028
 '''
 
 import netCDF4 as netCDF
@@ -70,7 +71,7 @@ def calcs(rho_river, doprint=True):
 
     # calculate depth and equivalent temperature for input river density
     depth_river = np.interp(rho_river, rho, depth)
-    temp_river = tempeq[0]
+    temp_river = 4  # deg C, from Clarke 2004 for Lake temp  # tempeq[0]
 
     # calculate river salinity using linear equation
     salt_river = 1/SCOEF * (rho_river/rho0 - 1 + TCOEF*(temp_river - T0)) + S0
