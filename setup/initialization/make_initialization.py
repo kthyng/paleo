@@ -71,7 +71,7 @@ def calcs(rho_river, doprint=True):
 
     # calculate depth and equivalent temperature for input river density
     depth_river = np.interp(rho_river, rho, depth)
-    temp_river = 4  # deg C, from Clarke 2004 for Lake temp  # tempeq[0]
+    temp_river = 12  # deg C, from Clarke 2004 for Lake temp  # tempeq[0]
 
     # calculate river salinity using linear equation
     salt_river = 1/SCOEF * (rho_river/rho0 - 1 + TCOEF*(temp_river - T0)) + S0
